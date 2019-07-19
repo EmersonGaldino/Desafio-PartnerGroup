@@ -101,7 +101,7 @@ Caso a marca só tenha o nome preenchido, o sistema irá verificar e preencher o
 
 Não é necessario ter o corpo inteiro do Patrimônio para realizar a alteração, somente os atributos desejados.
 
-☑    **DELETE** - http://localhost:51549/patrimonios/
+☑    **DELETE** - http://localhost:51549/patrimonios/{id}
 
 ________________________
 #### MARCA - ENDPOINTS ####
@@ -125,6 +125,6 @@ Não é necessario ter o corpo inteiro da Marca para realizar a alteração, som
 
 Esse método permite a alteração do ID, caso o mesmo não esteja vinculado a um patrimônio.
 
-☑    **DELETE** - http://localhost:51549/marcas/
+☑    **DELETE** - http://localhost:51549/marcas/{id}
 
 
