@@ -22,6 +22,19 @@ namespace Desafio_PartnerGroup.Controllers
 
             if (patrimonio == null || patrimonio.Nome == null) {
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Corpo de Patrimonio incorreto."));
+            } else if (patrimonio.MarcaId == 0 && patrimonio.Marca != null && String.IsNullOrEmpty(patrimonio.Marca.Nome)) {
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Nenhum atributo de marca foi preenchido."));
+            } else if (patrimonio.Marca != null && patrimonio.Marca.Id == 0 && !String.IsNullOrEmpty(patrimonio.Marca.Nome)) {
+
+                // BUSCA MARCA
+
+                Marca marca = BaseSQL.Execute(String.Format("SELECT * FROM Marcas WHERE Nome = '{0}'", patrimonio.Marca.Nome)).AsEnumerable().Select(s => new Marca(s.Field<int>("MarcaId"), s.Field<string>("Nome"))).FirstOrDefault();
+
+                if (marca == null) {
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Não há marca com esse nome no sistema.");
+                } else {
+                    patrimonio.Marca = marca;
+                }
             }
 
             // BUSCA PATRIMONIOS PARA VERIFICAR DUPLICIDADE

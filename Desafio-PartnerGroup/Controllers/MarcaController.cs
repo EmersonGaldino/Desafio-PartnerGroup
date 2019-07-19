@@ -18,8 +18,12 @@ namespace Desafio_PartnerGroup.Controllers
 
             // VERIFICA MARCA
 
-            if (marca == null || marca.Id == null || marca.Nome == null) {
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Corpo de Marca incorreta."));
+            if (marca == null || marca.Id == 0 || marca.Nome == null) {
+                if (marca.Id == 0) {
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("O ID da Marca precisa ser diferente de 0."));
+                } else {
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Corpo de Marca incorreta."));
+                }
             }
 
             // BUSCA MARCAS PARA VERIFICAR DUPLICIDADE
@@ -33,11 +37,11 @@ namespace Desafio_PartnerGroup.Controllers
             if (marcas.Rows.Count > 0) {
 
                 if (marcas.AsEnumerable().Where(wh => wh.Field<int>("MarcaId") == marca.Id).FirstOrDefault() != null) {
-                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("ID de marca já existente no sistema"));
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("ID de Marca já existente no sistema"));
                 }
 
                 if (marcas.AsEnumerable().Where(wh => String.Equals(wh.Field<string>("Nome"), marca.Nome, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() != null) {
-                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Nome de marca já existe no sistema"));
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Nome de Marca já existente no sistema"));
                 }
 
             }
@@ -47,7 +51,13 @@ namespace Desafio_PartnerGroup.Controllers
                                                marca.Id,
                                                marca.Nome));
 
-                return this.Request.CreateResponse(HttpStatusCode.Accepted, marca);
+                var response = new {
+                    Message = "Registro de Marca realizado com sucesso.",
+                    Url = "http://localhost:51549/marcas/" + marca.Id
+                };
+
+
+                return this.Request.CreateResponse(HttpStatusCode.Accepted, response);
             } catch (Exception ex) {
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
@@ -97,7 +107,19 @@ namespace Desafio_PartnerGroup.Controllers
 
             try {
 
-                DataTable patrimonios = BaseSQL.Execute(String.Format(@"SELECT * FROM Patrimonios WHERE MarcaId = {0}", id));
+                // Transforma a consulta em objeto genérico para mostrar Json com os atributos corretos (sem MarcaId)
+
+                var patrimonios = BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
+                                                                FROM Patrimonios
+                                                                INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId
+                                                                WHERE Patrimonios.MarcaId = {0}", id))
+                                                                .AsEnumerable()
+                                                                .Select(s => new {
+                                                                    Id = s.Field<int>("PatrimonioId"),
+                                                                    Nome = s.Field<string>("Nome"),
+                                                                    Marca = new Marca(s.Field<int>("MarcaId"), s.Field<string>("Marca")),
+                                                                    Descricao = s.Field<string>("Descrição")
+                                                                });
 
                 return this.Request.CreateResponse(HttpStatusCode.Accepted, patrimonios);
 
@@ -111,11 +133,15 @@ namespace Desafio_PartnerGroup.Controllers
         [Route("marcas/{id}")]
         public HttpResponseMessage Put(Marca marca, int id) {
 
-            
+
             // VERIFICA MARCA
 
-            if ((marca == null) || (marca.Id == null && marca.Nome == null)) {
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Corpo de Marca incorreta."));
+            if ((marca == null) || (marca.Id == 0 && String.IsNullOrEmpty(marca.Nome))) {
+                if (marca != null && marca.Id == 0) {
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("O ID do registro não pode ser 0."));
+                } else {
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Corpo de Marca incorreta."));
+                }
             }
 
             // BUSCA MARCAS PARA VERIFICAR DUPLICIDADE
@@ -150,15 +176,35 @@ namespace Desafio_PartnerGroup.Controllers
 
             try {
 
-                BaseSQL.Execute(String.Format(@"UPDATE Marcas
-                                            SET MarcaId = {0}, Nome = '{1}'
-                                            WHERE MarcaID = {2}", marca.Id, marca.Nome, id));
+                string query = "UPDATE Marcas SET ";
+                query += marca.Id != 0 ? String.Format("MarcaId = {0},", marca.Id) : String.Empty;
+                query += !String.IsNullOrEmpty(marca.Nome) ? String.Format("Nome = '{0}'", marca.Nome) : String.Empty;
 
-                return this.Request.CreateResponse(HttpStatusCode.Accepted, "Alteração realizada com sucesso");
+                if (query[query.Length - 1] == ',')
+                    query = query.Remove(query.Length - 1);
+
+                query += String.Format(" WHERE MarcaId = {0}", id);
+
+
+                BaseSQL.Execute(query);
+
+                var response = new {
+                    Message = "Registro de Marca alterado com sucesso.",
+                    Url = "http://localhost:51549/marcas/" + (marca.Id != 0 ? marca.Id : id)
+                };
+
+                return this.Request.CreateResponse(HttpStatusCode.Accepted, response);
 
             } catch (Exception ex) {
 
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                if (ex.Message.Contains("conflicted with the REFERENCE constraint")) {
+
+                    return this.Request.CreateErrorResponse(HttpStatusCode.Conflict, "A alteração do ID não é possivel pois esta vinculado a um ou mais Patrimônios.");
+
+                } else {
+
+                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                }
 
             }
         }
