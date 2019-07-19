@@ -60,7 +60,6 @@ ________________________
 
 ```javascript
 {
-  "Id": 1,
   "Nome": "Exemplar",
   "MarcaId": 3,  
   "Marca": {
