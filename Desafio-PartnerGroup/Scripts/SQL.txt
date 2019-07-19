@@ -1,0 +1,15 @@
+﻿CREATE DATABASE "db-vgmm";
+
+USE [db-vgmm];
+
+CREATE TABLE Marcas(
+	MarcaId INT PRIMARY KEY NOT NULL,
+	Nome VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE Patrimonios(
+	PatrimonioId INT PRIMARY KEY NOT NULL,  
+	Nome VARCHAR(25) NOT NULL,
+	MarcaId INT NOT NULL FOREIGN KEY REFERENCES Marcas(MarcaId),
+	Descrição TEXT
+);

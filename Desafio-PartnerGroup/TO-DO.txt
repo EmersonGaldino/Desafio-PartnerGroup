@@ -1,0 +1,1 @@
+﻿TRATAR ID 0 quando id esta vazio
