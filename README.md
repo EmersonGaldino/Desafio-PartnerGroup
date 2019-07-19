@@ -123,7 +123,7 @@ Esse método retorna uma lista de todos os patrimônios que contém a Marca com 
 
 Não é necessario ter o corpo inteiro da Marca para realizar a alteração, somente os atributos desejados.
 
-Esse método permite a alteração do ID.
+Esse método permite a alteração do ID, caso o mesmo não esteja vinculado a um patrimônio.
 
 ☑    **DELETE** - http://localhost:51549/marcas/
 
