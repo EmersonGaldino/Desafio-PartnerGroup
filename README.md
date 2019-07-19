@@ -44,11 +44,13 @@ ________________________
 |---------------|:-----:|:-----:|:-----:|:-------------------------------------|
 | Id            |✖      |☑     |✖     | ID do Patrimônio                      |
 | Nome          |🔸      |☑     |☑     | Nome do Patrimônio                    |
-| MarcaId       |🔸☑    |✖     |☑     | ID da Marca do Patrimônio             |
-| Marca         |🔸☑    |☑     |☑     | Marca contendo atributos de ID e Nome |
+| MarcaId       |🔹    |✖     |☑     | ID da Marca do Patrimônio             |
+| Marca         |🔹    |☑     |☑     | Marca contendo atributos de ID e Nome |
 | Descrição     |☑      |☑     |☑     | Descrição do Patrimônio               |
 
 🔸 = Obrigatório
+
+🔹 = Alternavel, somente um dos atributos precisa ser preenchido.
 
 ☑ = Disponivel
 
