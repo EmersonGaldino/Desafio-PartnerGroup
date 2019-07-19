@@ -60,7 +60,6 @@ ________________________
 
 ```javascript
 {
-  "Id": 1,
   "Nome": "Exemplar",
   "MarcaId": 3,  
   "Marca": {
@@ -120,12 +119,12 @@ Esse método não permite a postagem de IDs ou Nomes duplicados.
 
 Esse método retorna uma lista de todos os patrimônios que contém a Marca com o ID escolhido.
 
-☑    **PUT** - http://localhost:51549/patrimonios/{id}
+☑    **PUT** - http://localhost:51549/marcas/{id}
 
 Não é necessario ter o corpo inteiro da Marca para realizar a alteração, somente os atributos desejados.
 
 Esse método permite a alteração do ID.
 
-☑    **DELETE** - http://localhost:51549/patrimonios/
+☑    **DELETE** - http://localhost:51549/marcas/
 
 
