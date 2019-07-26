@@ -45,12 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EyeSoft.Core, Version=3.0.6836.35031, Culture=neutral, PublicKeyToken=f52adcc2e30d4b8f, processorArchitecture=MSIL">
-      <HintPath>..\packages\EyeSoft.Core.3.0.6836.35031\lib\net45\EyeSoft.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="EyeSoft.FluentValidation, Version=3.0.6864.24502, Culture=neutral, PublicKeyToken=f52adcc2e30d4b8f, processorArchitecture=MSIL">
-      <HintPath>..\packages\EyeSoft.FluentValidation.3.0.6864.24502\lib\net45\EyeSoft.FluentValidation.dll</HintPath>
-    </Reference>
     <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.8.0.100\lib\net45\FluentValidation.dll</HintPath>
     </Reference>
