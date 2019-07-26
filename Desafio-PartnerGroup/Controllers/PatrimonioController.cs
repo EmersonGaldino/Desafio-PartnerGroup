@@ -1,11 +1,7 @@
 ﻿using Desafio_PartnerGroup.Models;
-using Desafio_PartnerGroup.SQL;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -42,16 +38,7 @@ namespace Desafio_PartnerGroup.Controllers
 
             try {
 
-                // Transforma a consulta em objeto genérico para mostrar Json com os atributos corretos (sem MarcaId)
-
-                List<Patrimonio> patrimonios = BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
-                                                                FROM Patrimonios
-                                                                INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId"))
-                                                                .AsEnumerable()
-                                                                .Select(s => new Patrimonio(s))
-                                                                .ToList();
-
-
+                List<Patrimonio> patrimonios = Service.Patrimonios.GetAll();
 
                 var patrimoniosJson = patrimonios.Select(s => new {
                     s.Id,

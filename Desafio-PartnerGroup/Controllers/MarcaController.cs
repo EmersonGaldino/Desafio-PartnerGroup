@@ -1,5 +1,4 @@
 ﻿using Desafio_PartnerGroup.Models;
-using Desafio_PartnerGroup.SQL;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Desafio_PartnerGroup.Services;
 
 namespace Desafio_PartnerGroup.Controllers
 {

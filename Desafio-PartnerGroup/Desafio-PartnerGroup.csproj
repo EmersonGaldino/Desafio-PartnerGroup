@@ -107,7 +107,7 @@
     <Compile Include="Domain\Services\MarcaService.cs" />
     <Compile Include="Domain\Services\PatrimonioService.cs" />
     <Compile Include="Domain\Interfaces\IService.cs" />
-    <Compile Include="Domain\Services\Services.cs" />
+    <Compile Include="Domain\Services\Service.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\db-vgmm.mdf" />
