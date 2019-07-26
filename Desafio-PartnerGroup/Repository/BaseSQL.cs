@@ -26,7 +26,6 @@ namespace Desafio_PartnerGroup.SQL {
 
         public static string ConnectionString;
         public static SqlConnection Connection;
-        public static string Database = "db-vgmm";
 
         public BaseSQL() {
         }
@@ -36,45 +35,13 @@ namespace Desafio_PartnerGroup.SQL {
             Connection = new SqlConnection(connectionString);
 
             try {
+
                 Connection.Open();
                 Connection.Close();
+
             } catch (Exception ex){
-                //if (ex.Message.Contains(Database)) {
-
-                //    try {
-
-                //        Connection = new SqlConnection(BuildConnectionString(false, connectionString));
-                //        Connection.Open();
-                //        Connection.Close();
-
-                //        // CRIA DATABASE E TABELAS
-
-                //        Execute(String.Format("CREATE DATABASE \"{0}\"", Database));
-                //        Execute(String.Format(@"USE [{0}]; CREATE TABLE Marcas(
-	               //                             MarcaId INT PRIMARY KEY NOT NULL,
-	               //                             Nome VARCHAR(15) NOT NULL
-                //                                );", Database));
-                //        Execute(String.Format(@"USE [{0}]; CREATE TABLE Patrimonios(
-	               //                             PatrimonioId INT IDENTITY(1,1) PRIMARY KEY NOT NULL,  
-	               //                             Nome VARCHAR(25) NOT NULL,
-	               //                             MarcaId INT NOT NULL FOREIGN KEY REFERENCES Marcas(MarcaId),
-	               //                             Descrição TEXT
-                //                                );", Database));
-
-                //        // TENTA RECONECTAR COM A DATABASE NO CONNECTION STRINGS
-
-                //        Connect(ConnectionString);
-
-
-                //    } catch (Exception ex2) {
-                //        throw new Exception(ex2.Message);
-                //    }
-
-                //} else {
 
                 throw new Exception(ex.Message);
-
-                //}
             }
 
         }

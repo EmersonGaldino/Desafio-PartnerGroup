@@ -12,15 +12,47 @@ namespace Desafio_PartnerGroup.Services {
 
         public int Create(Patrimonio item) {
 
+            if (String.IsNullOrEmpty(item.Nome)) {
+                throw new Exception("Atributo Nome é necessario para registro de Patrimônio.");
+            }
+
             Marca marca = ValidateMarca(item);
 
             if (marca == null) {
-                throw new Exception("Marca inexistente no sistema");
+                throw new Exception("Marca inexistente no sistema.");
             } else {
                 item.Marca = marca;
             }
 
             return Factory.Insert(item);
+
+        }
+
+        public void Modify(int id, Patrimonio item) {
+
+            Patrimonio patrimonio = Find(id);
+
+            if (patrimonio == null)
+                throw new Exception(String.Format("Patrimônio com ID {0} não existe no sistema.", id));
+
+
+            if (item.Marca != null || item.MarcaId != 0) {
+
+                try {
+                    Marca marca = ValidateMarca(item);
+                    if (marca != null) {
+                        item.Marca = marca;
+                    } else {
+                        throw new Exception("Marca inexistente no Sistema.");
+                    }
+                } catch (Exception ex) {
+                    if (!ex.Message.Contains("Atributo MarcaId ou Marca")) {
+                        throw ex;
+                    }
+                }
+            }
+
+            Factory.Update(id, item);
 
         }
 
@@ -35,7 +67,7 @@ namespace Desafio_PartnerGroup.Services {
             if (patrimonio != null) {
                 return patrimonio;
             } else {
-                throw new Exception(String.Format("Não existe Patrimônio com ID {0} no sistema", patrimonio.Id));
+                throw new Exception(String.Format("Não existe Patrimônio com ID ({0}) no sistema.", id));
             }
 
         }
@@ -46,47 +78,19 @@ namespace Desafio_PartnerGroup.Services {
 
         }
 
-        public void Modify(int id, Patrimonio item) {
-
-            Patrimonio patrimonio = Find(id);
-
-            if (patrimonio == null)
-                throw new Exception(String.Format("Patrimônio com ID {0} não existe no sistema", id));
-
-
-            if (item.Marca != null || item.MarcaId != 0) {
-
-                try {
-                    Marca marca = ValidateMarca(item);
-                    if (marca != null) {
-                        item.Marca = marca;
-                    } else {
-                        throw new Exception("Marca inexistente no Sistema");
-                    }
-                } catch (Exception ex) {
-                    if (!ex.Message.Contains("Atributo MarcaId ou Marca")) {
-                        throw ex;
-                    }
-                }
-            }
-
-            Factory.Update(id, item);
-
-        }
-
         public Marca ValidateMarca(Patrimonio item) {
 
             if (item.MarcaId != 0) {
                 if (item.Marca == null) {
                     item.Marca = new Marca() { Id = item.MarcaId };
-                } else if (item.Marca.Id != 0 && item.Marca.Id != item.Marca.Id) {
-                    throw new Exception("Os atributos MarcaId e Marca (ID) não podem ser diferentes. Defina o ID a ser ignorado como 0");
+                } else if (item.Marca.Id != 0 && item.MarcaId != item.Marca.Id) {
+                    throw new Exception("Os atributos MarcaId e Marca (ID) não podem ser diferentes. Defina o ID a ser ignorado como 0.");
                 } else if (item.Marca.Id == 0) {
                     item.Marca.Id = item.MarcaId;
                 }
             } else {
                 if (item.Marca == null || (item.Marca.Id == 0 && String.IsNullOrEmpty(item.Marca.Nome))) {
-                    throw new Exception("Atributo MarcaId ou Marca (ID ou Nome) é necessario");
+                    throw new Exception("Atributo MarcaId ou Marca (ID ou Nome) é necessario.");
                 }
             }
 

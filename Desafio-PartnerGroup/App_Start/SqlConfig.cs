@@ -12,11 +12,6 @@ namespace Desafio_PartnerGroup {
 
             BaseSQL.Connect(ConfigurationManager.ConnectionStrings["SQL"].ConnectionString);
 
-            //new BaseSQL(){
-            //    Server = "DESKTOP-NNOAUCQ\\SQLEXPRESS",
-            //    Database = "db-vgmm",
-            //}.Connect();
-
         }
     }
 }

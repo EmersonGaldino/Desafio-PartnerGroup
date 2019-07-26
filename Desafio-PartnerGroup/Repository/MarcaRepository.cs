@@ -10,18 +10,13 @@ using System.Web;
 namespace Desafio_PartnerGroup {
     public class MarcaRepository : IRepository<Marca> {
 
-        public Marca GetById(int id) {
-            
-            return BaseSQL.Execute(String.Format(@"SELECT * FROM Marcas WHERE MarcaId = {0}", id))
-                                                .AsEnumerable()
-                                                .Select(s => new Marca(s))
-                                                .FirstOrDefault();
+        public int Insert(Marca item) {
 
-        }
+           BaseSQL.Execute(String.Format("INSERT INTO Marcas VALUES({0},'{1}')",
+                                            item.Id,
+                                            item.Nome));
 
-        public void Delete(int id) {
-
-            BaseSQL.Execute(String.Format("DELETE FROM * WHERE MarcaId = {0}", id));
+            return item.Id;
 
         }
 
@@ -41,14 +36,19 @@ namespace Desafio_PartnerGroup {
             
         }
 
-        public List<Patrimonio> GetAllPatrimoniosByMarca(int id) {
-            return BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
-                                                                FROM Patrimonios
-                                                                INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId
-                                                                WHERE Patrimonios.MarcaId = {0}", id))
-                                                                .AsEnumerable()
-                                                                .Select(s => new Patrimonio(s))
-                                                                .ToList();
+        public void Delete(int id) {
+
+            BaseSQL.Execute(String.Format("DELETE FROM Marcas WHERE MarcaId = {0}", id));
+
+        }
+
+        public Marca GetById(int id) {
+            
+            return BaseSQL.Execute(String.Format(@"SELECT * FROM Marcas WHERE MarcaId = {0}", id))
+                                                .AsEnumerable()
+                                                .Select(s => new Marca(s))
+                                                .FirstOrDefault();
+
         }
 
         public Marca GetByItem(Marca item) {
@@ -67,14 +67,23 @@ namespace Desafio_PartnerGroup {
                                         .FirstOrDefault();
         }
 
-        public int Insert(Marca item) {
+        public List<Marca> GetAll() {
 
-           BaseSQL.Execute(String.Format("INSERT INTO Marcas VALUES({0},'{1}')",
-                                            item.Id,
-                                            item.Nome));
+            return BaseSQL.Execute("SELECT * FROM Marcas")
+                .AsEnumerable()
+                .Select(s => new Marca(s))
+                .ToList();
 
-            return item.Id;
+        }
 
+        public List<Patrimonio> GetAllPatrimoniosByMarca(int id) {
+            return BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
+                                                                FROM Patrimonios
+                                                                INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId
+                                                                WHERE Patrimonios.MarcaId = {0}", id))
+                                                                .AsEnumerable()
+                                                                .Select(s => new Patrimonio(s))
+                                                                .ToList();
         }
 
         public List<Marca> Exist(Marca item) {
@@ -95,13 +104,6 @@ namespace Desafio_PartnerGroup {
                    .ToList();
         }
 
-        public List<Marca> GetAll() {
-
-            return BaseSQL.Execute("SELECT * FROM Marcas")
-                .AsEnumerable()
-                .Select(s => new Marca(s))
-                .ToList();
-
-        }
+        
     }
 }

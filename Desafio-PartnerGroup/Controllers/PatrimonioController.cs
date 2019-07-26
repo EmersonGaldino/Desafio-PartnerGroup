@@ -15,8 +15,6 @@ namespace Desafio_PartnerGroup.Controllers
 {
     public class PatrimonioController : ApiController {
 
-
-
         [Route("patrimonios")]
         public HttpResponseMessage Post(Patrimonio patrimonio) {
 
@@ -75,6 +73,10 @@ namespace Desafio_PartnerGroup.Controllers
         [Route("patrimonios/{id}")]
         public HttpResponseMessage Get(int id) {
 
+            if (id <= 0) {
+                return ErrorMessage(HttpStatusCode.BadRequest, "Número de ID precisa ser maior que 0.");
+            }
+
             try {
 
                 Patrimonio patrimonio = Service.Patrimonios.Find(id);
@@ -103,7 +105,9 @@ namespace Desafio_PartnerGroup.Controllers
         public HttpResponseMessage Put(Patrimonio patrimonio, int id) {
 
             if (patrimonio == null) {
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Corpo de Patrimônio incorreta."));
+                return ErrorMessage(HttpStatusCode.BadRequest, new Exception("Corpo (Json) de Patrimônio incorreto."));
+            } else if (id <= 0) {
+                return ErrorMessage(HttpStatusCode.BadRequest, "Número de ID precisa ser maior que 0.");
             }
 
             try {
@@ -120,6 +124,10 @@ namespace Desafio_PartnerGroup.Controllers
 
         [Route("patrimonios/{id}")]
         public HttpResponseMessage Delete(int id) {
+
+            if (id <= 0) {
+                return ErrorMessage(HttpStatusCode.BadRequest, "Número de ID precisa ser maior que 0.");
+            }
 
             try {
 

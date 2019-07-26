@@ -9,29 +9,6 @@ using System.Web;
 namespace Desafio_PartnerGroup.Repository {
     public class PatrimonioRepository : IRepository<Patrimonio> {
 
-        public void Delete(int id) {
-            BaseSQL.Execute(String.Format("DELETE FROM * WHERE PatrimonioId = {0}", id));
-        }
-
-        public List<Patrimonio> GetAll() {
-            return BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
-                                                    FROM Patrimonios
-                                                    INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId"))
-                                                    .AsEnumerable()
-                                                    .Select(s => new Patrimonio(s))
-                                                    .ToList();
-        }
-
-        public Patrimonio GetById(int id) {
-            return BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
-                                                    FROM Patrimonios
-                                                    INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId
-                                                    WHERE PatrimonioId = {0}", id))
-                                                    .AsEnumerable()
-                                                    .Select(s => new Patrimonio(s))
-                                                    .FirstOrDefault();
-        }
-
         public int Insert(Patrimonio item) {
             DataTable result = BaseSQL.Execute(String.Format("INSERT INTO Patrimonios VALUES('{0}',{1},{2}); SELECT SCOPE_IDENTITY();",
                                                item.Nome,
@@ -56,5 +33,34 @@ namespace Desafio_PartnerGroup.Repository {
 
             BaseSQL.Execute(query);
         }
+
+        public void Delete(int id) {
+            BaseSQL.Execute(String.Format("DELETE FROM Patrimonios WHERE PatrimonioId = {0}", id));
+        }
+
+        public Patrimonio GetById(int id) {
+            return BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
+                                                    FROM Patrimonios
+                                                    INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId
+                                                    WHERE PatrimonioId = {0}", id))
+                                                    .AsEnumerable()
+                                                    .Select(s => new Patrimonio(s))
+                                                    .FirstOrDefault();
+        }
+
+        public List<Patrimonio> GetAll() {
+            return BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
+                                                    FROM Patrimonios
+                                                    INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId"))
+                                                    .AsEnumerable()
+                                                    .Select(s => new Patrimonio(s))
+                                                    .ToList();
+        }
+
+        
+
+        
+
+        
     }
 }

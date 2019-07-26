@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace Desafio_PartnerGroup {
     public interface IRepository<T> {
 
-        T GetById(int id);
-
         int Insert(T item);
+
+        void Update(int id, T item);
 
         void Delete(int id);
 
-        void Update(int id, T item);
+        T GetById(int id);
 
         List<T> GetAll();
     }

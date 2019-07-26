@@ -9,10 +9,13 @@ namespace Desafio_PartnerGroup.Services {
 
         public MarcaRepository Factory = new MarcaRepository();
 
-        public MarcaService() {
-        }
-
         public int Create(Marca item) {
+
+            if (String.IsNullOrEmpty(item.Nome)) {
+               throw new Exception("Atributo Nome é necessario para o registro da Marca.");
+            } else if (item.Id == 0) {
+                throw new Exception("O ID da Marca precisa ser diferente de 0.");
+            }
 
             List<Marca> Existentes = Factory.Exist(item);
 
@@ -30,44 +33,11 @@ namespace Desafio_PartnerGroup.Services {
             }
         }
 
-        public void Delete(int id) {
-
-            Factory.Delete(Find(id).Id);
-
-        }
-
-        public Marca Find(int id) {
-
-            Marca marca = Factory.GetById(id);
-
-            if (marca != null) {
-                return marca;
-            } else {
-                throw new Exception(String.Format("Não existe Marca com ID {0} no sistema", marca.Id));
-            }
-
-        }
-
-        public Marca Find(Marca item) {
-
-            return Factory.GetByItem(item);
-
-        }
-
-        public List<Marca> GetAll() {
-
-            return Factory.GetAll();
-
-        }
-
-        public List<Patrimonio> GetAllByMarca(int id) {
-
-            return Factory.GetAllPatrimoniosByMarca(id);
-
-        }
-
         public void Modify(int id, Marca item) {
 
+            if (String.IsNullOrEmpty(item.Nome) && item.Id == 0) {
+                throw new Exception("Não há valores válidos para alteração de Marca.");
+            }
 
             List<Marca> Existentes = Factory.Exist(id, item);
 
@@ -96,5 +66,43 @@ namespace Desafio_PartnerGroup.Services {
 
             Factory.Update(id, item);
         }
+
+        public void Delete(int id) {
+
+            Factory.Delete(Find(id).Id);
+
+        }
+
+        public Marca Find(int id) {
+
+            Marca marca = Factory.GetById(id);
+
+            if (marca != null) {
+                return marca;
+            } else {
+                throw new Exception(String.Format("Não existe Marca com ID ({0}) no sistema", id));
+            }
+
+        }
+
+        public Marca Find(Marca item) {
+
+            return Factory.GetByItem(item);
+
+        }
+
+        public List<Marca> GetAll() {
+
+            return Factory.GetAll();
+
+        }
+
+        public List<Patrimonio> GetAllByMarca(int id) {
+
+            return Factory.GetAllPatrimoniosByMarca(id);
+
+        }
+
+        
     }
 }
