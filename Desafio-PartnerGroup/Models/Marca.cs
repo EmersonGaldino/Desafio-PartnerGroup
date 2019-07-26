@@ -5,9 +5,10 @@ using System.Linq;
 using System.Web;
 
 namespace Desafio_PartnerGroup.Models {
-    public class Marca : Entity {
+    public class Marca {
 
-        public string Nome;
+        public int Id       { get; set; }
+        public string Nome  { get; set; }
 
         public Marca() {
         }

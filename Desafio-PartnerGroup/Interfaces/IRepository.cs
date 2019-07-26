@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Desafio_PartnerGroup {
-    public interface IRepository<T> where T : Entity {
+    public interface IRepository<T> {
 
         T GetById(int id);
 
@@ -16,8 +16,6 @@ namespace Desafio_PartnerGroup {
         void Delete(int id);
 
         void Update(int id, T item);
-
-        List<T> Exist(T item);
 
         List<T> GetAll();
     }

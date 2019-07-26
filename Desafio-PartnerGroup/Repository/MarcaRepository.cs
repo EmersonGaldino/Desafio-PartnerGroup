@@ -41,6 +41,32 @@ namespace Desafio_PartnerGroup {
             
         }
 
+        public List<Patrimonio> GetAllPatrimoniosByMarca(int id) {
+            return BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
+                                                                FROM Patrimonios
+                                                                INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId
+                                                                WHERE Patrimonios.MarcaId = {0}", id))
+                                                                .AsEnumerable()
+                                                                .Select(s => new Patrimonio(s))
+                                                                .ToList();
+        }
+
+        public Marca GetByItem(Marca item) {
+
+            string query = @"SELECT * FROM Marcas WHERE ";
+            if (item.Id != 0 && !String.IsNullOrEmpty(item.Nome)) {
+                query += String.Format("MarcaId = {0} AND Nome = '{1}'", item.Id, item.Nome);
+            } else if (item.Id != 0) {
+                query += String.Format("MarcaId = {0}", item.Id);
+            } else {
+                query += String.Format("Nome = {0}", item.Nome);
+            }
+
+            return BaseSQL.Execute(query).AsEnumerable()
+                                        .Select(s => new Marca(s))
+                                        .FirstOrDefault();
+        }
+
         public int Insert(Marca item) {
 
            BaseSQL.Execute(String.Format("INSERT INTO Marcas VALUES({0},'{1}')",

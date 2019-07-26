@@ -48,9 +48,21 @@ namespace Desafio_PartnerGroup.Services {
 
         }
 
+        public Marca Find(Marca item) {
+
+            return Factory.GetByItem(item);
+
+        }
+
         public List<Marca> GetAll() {
 
             return Factory.GetAll();
+
+        }
+
+        public List<Patrimonio> GetAllByMarca(int id) {
+
+            return Factory.GetAllPatrimoniosByMarca(id);
 
         }
 

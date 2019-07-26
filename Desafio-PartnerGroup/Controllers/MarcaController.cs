@@ -49,7 +49,7 @@ namespace Desafio_PartnerGroup.Controllers
 
             } catch (Exception ex) {
 
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                return ErrorMessage(HttpStatusCode.BadRequest, ex.Message);
 
             }
         }
@@ -78,25 +78,20 @@ namespace Desafio_PartnerGroup.Controllers
 
             try {
 
-                // Transforma a consulta em objeto genérico para mostrar Json com os atributos corretos (sem MarcaId)
+                List<Patrimonio> patrimonios = Service.Marcas.GetAllByMarca(id);
 
-                var patrimonios = BaseSQL.Execute(String.Format(@"SELECT Patrimonios.*,Marcas.Nome as Marca
-                                                                FROM Patrimonios
-                                                                INNER JOIN Marcas ON Patrimonios.MarcaId = Marcas.MarcaId
-                                                                WHERE Patrimonios.MarcaId = {0}", id))
-                                                                .AsEnumerable()
-                                                                .Select(s => new {
-                                                                    Id = s.Field<int>("PatrimonioId"),
-                                                                    Nome = s.Field<string>("Nome"),
-                                                                    Marca = new Marca(s.Field<int>("MarcaId"), s.Field<string>("Marca")),
-                                                                    Descricao = s.Field<string>("Descrição")
-                                                                });
+                var patrimoniosJson = patrimonios.Select(s => new {
+                    s.Id,
+                    s.Nome,
+                    s.Marca,
+                    s.Descricao
+                }).ToList();
 
-                return this.Request.CreateResponse(HttpStatusCode.Accepted, patrimonios);
+                return this.Request.CreateResponse(HttpStatusCode.Accepted, patrimoniosJson);
 
             } catch (Exception ex) {
 
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+                return ErrorMessage(HttpStatusCode.BadRequest, ex.Message);
 
             }
         }

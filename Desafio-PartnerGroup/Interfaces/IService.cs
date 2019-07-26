@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 
 namespace Desafio_PartnerGroup.Services {
-    public interface IService<T> where T : Entity {
+    public interface IService<T> {
 
         int Create(T item);
 
