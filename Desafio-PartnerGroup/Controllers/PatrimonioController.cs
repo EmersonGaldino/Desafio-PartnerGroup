@@ -15,6 +15,8 @@ namespace Desafio_PartnerGroup.Controllers
 {
     public class PatrimonioController : ApiController {
 
+
+
         [Route("patrimonios")]
         public HttpResponseMessage Post(Patrimonio patrimonio) {
 
